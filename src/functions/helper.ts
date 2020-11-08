@@ -1,5 +1,5 @@
 import { User } from "../entity/User";
-import {createConnection} from 'typeorm';
+import {createConnection, getRepository, getConnection} from 'typeorm';
 import {Request, Response} from 'express';
 
 export const createUser = async (req: Request, res: Response) => {
@@ -17,6 +17,17 @@ export const createUser = async (req: Request, res: Response) => {
             console.log(newUser)
             res.status(200).json(newUser)
         }
+    }catch(e){
+        console.error(e.message)
+    }
+}
+
+export const findUser = async (req: Request, res: Response) => {
+    const {id} = req.params;
+    try{
+        const userRepository = await getConnection().getRepository(User);
+        const foundUser = await userRepository.findOne(id);
+        console.info(foundUser)
     }catch(e){
         console.error(e.message)
     }
